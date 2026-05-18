@@ -1,5 +1,8 @@
 import { Router } from 'express';
+import authorsRouter from './authors.js';
 const router = Router();
+
+
 
 // GET /api/posts
 router.get('/', (req, res) => {

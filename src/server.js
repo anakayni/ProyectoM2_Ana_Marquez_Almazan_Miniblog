@@ -1,5 +1,4 @@
-import dotenv from 'dotenv';
-dotenv.config();
+import "dotenv/config";
 
 import express from 'express';
 import router from './routes/index.js';
@@ -8,7 +7,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
-app.use('/api', router);  // ✅ todas las rutas quedan bajo /api
+app.use('/api', router);  
 
 app.get('/', (req, res) => {
   res.json({ 
