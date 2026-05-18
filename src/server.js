@@ -2,18 +2,14 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import express from 'express';
-import authorsRouter from './routes/authors';
-import postsRouter from './routes/posts';
 import router from './routes/index.js';
 
 const app = express();
-const PORT = process.env.PORT || 3000;ß
+const PORT = process.env.PORT || 3000;
 
-// Middleware para parsear JSON
 app.use(express.json());
-app.use(router);
+app.use('/api', router);  // ✅ todas las rutas quedan bajo /api
 
-// Ruta raíz
 app.get('/', (req, res) => {
   res.json({ 
     message: 'Blog API',
@@ -24,12 +20,10 @@ app.get('/', (req, res) => {
   });
 });
 
-// Manejo de rutas no encontradas
 app.use((req, res) => {
   res.status(404).json({ error: 'Ruta no encontrada' });
 });
 
-// Manejo de errores
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ error: 'Error interno del servidor' });

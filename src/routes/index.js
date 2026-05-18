@@ -1,7 +1,10 @@
 import { Router } from "express";
-const router = Router()
+import authorsRouter from './authors.js';
+import postsRouter from './posts.js';
 
-router.use('/api/authors', authorsRouter);
-router.use('/api/posts', postsRouter); 
+const router = Router();
+
+router.use('/authors', authorsRouter);  // ✅ router, no app
+router.use('/posts', postsRouter);       // ✅ router, no app
 
 export default router;
