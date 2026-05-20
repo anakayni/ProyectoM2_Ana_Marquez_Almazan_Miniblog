@@ -3,6 +3,7 @@ cat > .gitignore << 'EOF'
 .env
 .env.local
 .env.*
+coverage/
 
 # Dependencias
 node_modules/
