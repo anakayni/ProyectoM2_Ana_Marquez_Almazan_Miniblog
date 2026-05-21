@@ -1,19 +1,25 @@
-// app.js
-// separo la app de server.js para poder importarla en los tests
-// sin que se quede escuchando con app.listen()
-
+import 'dotenv/config';
 import express from 'express';
+import swaggerUi from 'swagger-ui-express';
+import { readFileSync } from 'fs';
+import yaml from 'js-yaml';
 import router from './routes/index.js';
+import { errorHandler } from './middlewares/errorHandler.js';
 
 const app = express();
+
+// swagger — debe ir antes de las rutas
+const swaggerDocument = yaml.load(readFileSync('./openapi.yaml', 'utf8'));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(express.json());
 app.use('/api', router);
 
-// ruta raiz para verificar que la api esta corriendo
+// ruta raiz
 app.get('/', (req, res) => {
   res.json({
-    message: 'Blog API',
+    message: 'anaKayni Blog API',
+    docs: 'http://localhost:3000/api-docs',
     endpoints: {
       authors: '/api/authors',
       posts: '/api/posts'
@@ -21,15 +27,12 @@ app.get('/', (req, res) => {
   });
 });
 
-// si la ruta no existe
+// ruta no encontrada
 app.use((req, res) => {
   res.status(404).json({ error: 'Ruta no encontrada' });
 });
 
-// manejo de errores generales
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ error: 'Error interno del servidor' });
-});
+// middleware de errores
+app.use(errorHandler);
 
 export default app;
