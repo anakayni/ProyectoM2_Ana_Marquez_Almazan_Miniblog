@@ -1,52 +1,35 @@
+// app.js
+// separo la app de server.js para poder importarla en los tests
+// sin que se quede escuchando con app.listen()
+
 import express from 'express';
+import router from './routes/index.js';
 
 const app = express();
 
 app.use(express.json());
+app.use('/api', router);
 
-// Rutas
-
-//GET /users
-app.get('/users', (req, res) => {
-  res.json(users);
+// ruta raiz para verificar que la api esta corriendo
+app.get('/', (req, res) => {
+  res.json({
+    message: 'Blog API',
+    endpoints: {
+      authors: '/api/authors',
+      posts: '/api/posts'
+    }
+  });
 });
 
-//GET /users/:id
-app.get('/users/:id', (req, res) => {
-  const user = users.find(u => u.id === parseInt(req.params.id));
-  if (!user) {
-    return res.status(404).json({ error: 'Usuario no encontrado' });
-  }
-  res.json(user);
+// si la ruta no existe
+app.use((req, res) => {
+  res.status(404).json({ error: 'Ruta no encontrada' });
 });
 
-//POST /users
-app.post('/users', (req, res) => {
-  const { name, email, age } = req.body;
-  const user = {id: nextId++, name, email, age};
-  users.push(user);
-  res.status(201).json(user);
-});
-
-//PUT /users/:id
-app.put('/users/:id', (req, res) => {
-  const index = users.find((u) => u.id === parseInt(req.params.id));
-  if (index === -1) {
-    return res.status(404).json({ error: 'Usuario no encontrado' });
-  }
-  const { name, email, age } = req.body;
-  users[index] = { id: users[index].id, name, email, age };
-  res.json(users[index]);
-});
-
-//DELETE /users/:id
-app.delete('/users/:id', (req, res) => {
-  const index = users.findIndex(u => u.id === parseInt(req.params.id));
-  if (index === -1) {
-    return res.status(404).json({ error: 'Usuario no encontrado' });
-  }
-  users.splice(index, 1);
-  res.json({ message: 'Usuario eliminado' });
+// manejo de errores generales
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: 'Error interno del servidor' });
 });
 
 export default app;
