@@ -19,6 +19,7 @@
     "pg": "^8.21.0"
   },
   "devDependencies": {
+    "@vitest/coverage-v8": "^4.1.7",
     "supertest": "^7.2.2",
     "vitest": "^4.1.7"
   }
