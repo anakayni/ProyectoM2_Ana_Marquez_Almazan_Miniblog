@@ -8,7 +8,7 @@ info:
 servers:
   - url: http://localhost:3000/api
     description: Servidor local
-  - url: https://tu-app.railway.app/api
+  - url: https://proyectom2anamarquezalmazanminiblog-production.up.railway.app/
     description: Producción en Railway
 
 tags:
