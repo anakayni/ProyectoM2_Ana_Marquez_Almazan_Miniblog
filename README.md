@@ -1,8 +1,12 @@
-# Blog API
+# anaKayni Blog API
 ### ProyectoM2_Ana_Marquez_Almazan
 
 API REST con Node.js, Express y PostgreSQL para gestionar autores y posts.
-Proyecto del módulo 2 — Ana Márquez Almazán - Soy Henry Fullstack
+Proyecto del módulo 2 — Ana Márquez Almazán.
+
+🚀 **Demo en producción:** https://proyectom2anamarquezalmazanminiblog-production.up.railway.app/
+
+📖 **Documentación OpenAPI (Swagger):** https://proyectom2anamarquezalmazanminiblog-production.up.railway.app/api-docs/
 
 ---
 
@@ -50,20 +54,31 @@ Todo lo que me genero lo lei, lo entendi y lo probe antes de usarlo. Tambien tuv
 ```
 ProyectoM2_Ana_Marquez_Almazan/
 ├── src/
+│   ├── controllers/
+│   │   ├── authorsControllers.js  # logica de cada endpoint de authors
+│   │   └── postsControllers.js    # logica de cada endpoint de posts
 │   ├── db/
-│   │   ├── config.js          # configuracion de la conexion a postgres
-│   │   ├── setup.sql          # script para crear las tablas y meter datos de prueba
-│   │   └── test-connection.js # para verificar que la db conecta bien
+│   │   ├── config.js              # configuracion de la conexion a postgres
+│   │   ├── setup.sql              # script para crear las tablas y meter datos de prueba
+│   │   └── test-connection.js     # para verificar que la db conecta bien
+│   ├── middlewares/
+│   │   └── errorHandler.js        # middleware global de manejo de errores
 │   ├── routes/
-│   │   ├── index.js           # une todas las rutas
-│   │   ├── authors.js         # rutas de autores
-│   │   └── posts.js           # rutas de posts
-│   └── server.js              # aqui arranca el servidor
-├── test/
-│   └── api.test.js            # 26 tests con vitest y supertest
+│   │   ├── authorsRouter.js       # rutas de autores
+│   │   ├── index.js               # une todas las rutas
+│   │   └── postsRouter.js         # rutas de posts
+│   ├── services/
+│   │   ├── authorsServices.js     # queries SQL de authors
+│   │   └── postsServices.js       # queries SQL de posts
+│   ├── utils/
+│   │   └── validators.js          # validaciones reutilizables
+│   ├── app.js                     # configura express, swagger y middlewares
+│   └── server.js                  # arranca el servidor
+├── tests/
+│   └── api.test.js                # 26 tests con vitest y supertest
 ├── vitest.config.js
-├── openapi.yaml               # documentacion de los endpoints
-├── .env.example               # ejemplo de variables de entorno
+├── openapi.yaml                   # documentacion de los endpoints
+├── .env.example                   # ejemplo de variables de entorno
 ├── .gitignore
 ├── package.json
 └── README.md
@@ -102,7 +117,7 @@ Copiar el archivo de ejemplo:
 cp .env.example .env
 ```
 
-Editar `.env` con tus datos reales (ver seccion `.env.example` abajo):
+Editar `.env` con tus datos reales:
 
 ### 4. Crear el usuario y la base de datos en PostgreSQL
 
@@ -130,12 +145,6 @@ psql -U blog_user -d blog_db -f src/db/setup.sql
 node src/db/test-connection.js
 ```
 
-Debe mostrar:
-```
-Conexión exitosa a PostgreSQL
-Hora del servidor de base de datos: 2026-...
-```
-
 ### 7. Arrancar el servidor
 
 ```bash
@@ -144,12 +153,11 @@ npm run dev     # modo desarrollo (se reinicia solo al guardar)
 ```
 
 La API estara en: `http://localhost:3000`
+Documentacion Swagger: `http://localhost:3000/api-docs`
 
 ---
 
 ## .env.example
-
-El proyecto necesita estas variables de entorno. Nunca subas el `.env` real a GitHub.
 
 ```
 PORT=3000
@@ -225,12 +233,11 @@ Tests      26 passed (26)
 
 ## Documentacion OpenAPI
 
-El archivo `openapi.yaml` tiene la documentacion de todos los endpoints con ejemplos de request y response.
+Disponible en produccion:
+👉 https://proyectom2anamarquezalmazanminiblog-production.up.railway.app/api-docs/
 
-Para verla de forma visual:
-1. Ir a https://editor.swagger.io
-2. File → Import file
-3. Subir el archivo `openapi.yaml`
+Para verla localmente despues de arrancar el servidor:
+👉 http://localhost:3000/api-docs
 
 ---
 
@@ -254,14 +261,14 @@ Ir a https://railway.app y crear una cuenta.
 
 En la pestaña Variables del servicio de Node.js agregar:
 
-| Variable    | Valor                                        |
-|-------------|----------------------------------------------|
-| PORT        | 3000                                         |
+| Variable    | Valor                                         |
+|-------------|-----------------------------------------------|
+| PORT        | 3000                                          |
 | DB_HOST     | el internal host que muestra Railway (Connect)|
-| DB_PORT     | 5432                                         |
-| DB_NAME     | railway                                      |
-| DB_USER     | postgres                                     |
-| DB_PASSWORD | el password que genera Railway               |
+| DB_PORT     | 5432                                          |
+| DB_NAME     | railway                                       |
+| DB_USER     | postgres                                      |
+| DB_PASSWORD | el password que genera Railway                |
 
 ### 5. Crear las tablas
 
@@ -270,7 +277,6 @@ En Railway, abrir la base de datos → pestaña Query → pegar el contenido de 
 ### 6. Deploy automatico
 
 Cada `git push` a main despliega automaticamente.
-La URL publica aparece en Settings → Domains.
 
 ---
 
