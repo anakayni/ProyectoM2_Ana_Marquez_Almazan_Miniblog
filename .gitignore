@@ -1,7 +1,6 @@
 cat > .gitignore << 'EOF'
 # Variables de entorno
 .env
-.env.local
 .env.*
 coverage/
 
